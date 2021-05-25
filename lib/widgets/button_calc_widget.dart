@@ -35,7 +35,6 @@ class ButtonCalcWidget extends StatelessWidget {
     return Container(
       height: size,
       width: size,
-      color: AppColors.blue,
       child: TextButton(
         child: Text(
           label,
