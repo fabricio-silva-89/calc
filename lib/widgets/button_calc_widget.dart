@@ -1,4 +1,3 @@
-import 'package:calc/core/app_colors.dart';
 import 'package:calc/core/app_text_styles.dart';
 import 'package:flutter/material.dart';
 

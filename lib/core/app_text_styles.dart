@@ -8,17 +8,17 @@ class AppTextStyles {
     fontSize: 24.0,
   );
 
-  static final TextStyle keyboardSymbol = GoogleFonts.roboto(
+  static final TextStyle keyboardSymbol = GoogleFonts.notoSans(
     color: AppColors.gold,
     fontSize: 24.0,
   );
 
-  static final TextStyle result = GoogleFonts.roboto(
+  static final TextStyle result = GoogleFonts.notoSans(
     color: AppColors.white,
-    fontSize: 78.0,
+    fontSize: 52.0,
   );
 
-  static final TextStyle input = GoogleFonts.roboto(
+  static final TextStyle input = GoogleFonts.notoSans(
     color: AppColors.white,
     fontSize: 32.0,
   );

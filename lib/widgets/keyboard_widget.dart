@@ -54,8 +54,7 @@ class KeyboardWidget extends StatelessWidget {
         children: [
           Row(
             children: [
-              ButtonCalcWidget.symbol(label: "AC", onPressed: onPressedClear),
-              ButtonCalcWidget.symbol(label: "()", onPressed: onPressedParentheses),
+              Expanded(child: ButtonCalcWidget.symbol(label: "AC", onPressed: onPressedClear)),
               ButtonCalcWidget.symbol(label: "%", onPressed: onPressedPercent),
               ButtonCalcWidget.symbol(label: "/", onPressed: onPressedDivision),
             ],
@@ -73,7 +72,7 @@ class KeyboardWidget extends StatelessWidget {
               ButtonCalcWidget.number(label: "4", onPressed: onPressed4),
               ButtonCalcWidget.number(label: "5", onPressed: onPressed5),
               ButtonCalcWidget.number(label: "6", onPressed: onPressed6),
-              ButtonCalcWidget.symbol(label: "-", onPressed: onPressed7),
+              ButtonCalcWidget.symbol(label: "-", onPressed: onPressedSubtraction),
             ],
           ),
           Row(
@@ -86,8 +85,7 @@ class KeyboardWidget extends StatelessWidget {
           ),
           Row(
             children: [
-              ButtonCalcWidget.number(label: ""),
-              ButtonCalcWidget.number(label: "0", onPressed: onPressed0),
+              Expanded(child: ButtonCalcWidget.number(label: "0", onPressed: onPressed0)),
               ButtonCalcWidget.number(label: ",", onPressed: onPressedComma),
               ButtonCalcWidget.symbol(label: "=", onPressed: onPressedEqual),
             ],

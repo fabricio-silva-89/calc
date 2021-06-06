@@ -2,6 +2,8 @@ import 'package:calc/controller/home_controller.dart';
 import 'package:calc/widgets/display_widget.dart';
 import 'package:calc/widgets/keyboard_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:calc/core/ad_helper.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -10,83 +12,137 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   HomeController _homeController = HomeController();
+  late BannerAd _ad;
+  bool _isLoaded = false;
 
-  void addValue(String value) {
-    _homeController.addInput(value);
+  Widget checkForAd() {
+    if (_isLoaded == true) {
+      return Container(
+        child: AdWidget(
+          ad: _ad,
+        ),
+        width: _ad.size.width.toDouble(),
+        alignment: Alignment.center,
+      );
+    } else {
+      return CircularProgressIndicator();
+    }
+  }
+
+  void _addValue(String value) {
+    if (_homeController.isClearInOut) {
+      _homeController.clearInOut();
+      _homeController.isClearInOut = false;
+      setState(() {});
+    }
+
+    _homeController.addValue(value);
+    _homeController.lastButtonClick = value;
     setState(() {});
   }
 
-  void clear() {
+  void _clear() {
     _homeController.clear();
     setState(() {});
   }
 
   @override
+  void initState() {
+    super.initState();
+    _ad = BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      request: AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(onAdLoaded: (_) {
+        setState(() {
+          _isLoaded = true;
+        });
+      }, onAdFailedToLoad: (_, error) {
+        print("Ad Failed to Load with Error: $error");
+      }),
+    );
+
+    _ad.load();
+  }
+
+  @override
+  void dispose() {
+    _ad.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
           children: [
-            Expanded(child: DisplayWidget(input: _homeController.input, output: _homeController.output)),
+            Expanded(
+              child: DisplayWidget(
+                expression: _homeController.expression,
+                inOut: _homeController.inOut,
+              ),
+            ),
             KeyboardWidget(
               onPressed0: () {
-                addValue("0");
+                _addValue("0");
               },
               onPressed1: () {
-                addValue("1");
+                _addValue("1");
               },
               onPressed2: () {
-                addValue("2");
+                _addValue("2");
               },
               onPressed3: () {
-                addValue("3");
+                _addValue("3");
               },
               onPressed4: () {
-                addValue("4");
+                _addValue("4");
               },
               onPressed5: () {
-                addValue("5");
+                _addValue("5");
               },
               onPressed6: () {
-                addValue("6");
+                _addValue("6");
               },
               onPressed7: () {
-                addValue("7");
+                _addValue("7");
               },
               onPressed8: () {
-                addValue("8");
+                _addValue("8");
               },
               onPressed9: () {
-                addValue("9");
+                _addValue("9");
               },
               onPressedClear: () {
-                clear();
+                _clear();
               },
               onPressedParentheses: () {
-                //addValue("0");
+                _addValue("()");
               },
               onPressedPercent: () {
-                //addValue("0");
+                _addValue("%");
               },
               onPressedDivision: () {
-                addValue("/");
+                _addValue("/");
               },
               onPressedMutiplication: () {
-                addValue("X");
+                _addValue("X");
               },
               onPressedSubtraction: () {
-                addValue("-");
+                _addValue("-");
               },
               onPressedAddition: () {
-                addValue("+");
+                _addValue("+");
               },
               onPressedEqual: () {
-                //addValue("");
+                _addValue("=");
               },
               onPressedComma: () {
-                addValue(",");
+                _addValue(",");
               },
             ),
+            checkForAd(),
           ],
         ),
       ),
