@@ -2,8 +2,6 @@ import 'package:calc/controller/home_controller.dart';
 import 'package:calc/widgets/display_widget.dart';
 import 'package:calc/widgets/keyboard_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:calc/core/ad_helper.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -12,22 +10,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   HomeController _homeController = HomeController();
-  late BannerAd _ad;
-  bool _isLoaded = false;
-
-  Widget checkForAd() {
-    if (_isLoaded == true) {
-      return Container(
-        child: AdWidget(
-          ad: _ad,
-        ),
-        width: _ad.size.width.toDouble(),
-        alignment: Alignment.center,
-      );
-    } else {
-      return CircularProgressIndicator();
-    }
-  }
 
   void _addValue(String value) {
     if (_homeController.isClearInOut) {
@@ -47,27 +29,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _ad = BannerAd(
-      adUnitId: AdHelper.bannerAdUnitId,
-      request: AdRequest(),
-      size: AdSize.banner,
-      listener: BannerAdListener(onAdLoaded: (_) {
-        setState(() {
-          _isLoaded = true;
-        });
-      }, onAdFailedToLoad: (_, error) {
-        print("Ad Failed to Load with Error: $error");
-      }),
-    );
-
-    _ad.load();
-  }
-
-  @override
   void dispose() {
-    _ad.dispose();
     super.dispose();
   }
 
@@ -142,7 +104,6 @@ class _HomePageState extends State<HomePage> {
                 _addValue(",");
               },
             ),
-            checkForAd(),
           ],
         ),
       ),
