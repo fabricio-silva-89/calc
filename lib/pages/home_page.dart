@@ -9,24 +9,24 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  HomeController _homeController = HomeController();
+  HomeController homeController = HomeController();
 
-  void _addValue(String value) {
-    if (_homeController.isClearInOut) {
-      _homeController.clearInOut();
-      _homeController.isClearInOut = false;
-      setState(() {});
-    }
+  // void _addValue(String value) {
+  //   if (_homeController.isClearInOut) {
+  //     _homeController.clearInOut();
+  //     _homeController.isClearInOut = false;
+  //     setState(() {});
+  //   }
 
-    _homeController.addValue(value);
-    _homeController.lastButtonClick = value;
-    setState(() {});
-  }
+  //   _homeController.addValue(value);
+  //   _homeController.lastButtonClick = value;
+  //   setState(() {});
+  // }
 
-  void _clear() {
-    _homeController.clear();
-    setState(() {});
-  }
+  // void _clear() {
+  //   _homeController.clear();
+  //   setState(() {});
+  // }
 
   @override
   void dispose() {
@@ -41,67 +41,82 @@ class _HomePageState extends State<HomePage> {
           children: [
             Expanded(
               child: DisplayWidget(
-                expression: _homeController.expression,
-                inOut: _homeController.inOut,
+                inOut: homeController.inOut,
               ),
             ),
             KeyboardWidget(
               onPressed0: () {
-                _addValue("0");
+                homeController.number('0');
+                setState(() {});
               },
               onPressed1: () {
-                _addValue("1");
+                homeController.number('1');
+                setState(() {});
               },
               onPressed2: () {
-                _addValue("2");
+                homeController.number('2');
+                setState(() {});
               },
               onPressed3: () {
-                _addValue("3");
+                homeController.number('3');
+                setState(() {});
               },
               onPressed4: () {
-                _addValue("4");
+                homeController.number('4');
+                setState(() {});
               },
               onPressed5: () {
-                _addValue("5");
+                homeController.number('5');
+                setState(() {});
               },
               onPressed6: () {
-                _addValue("6");
+                homeController.number('6');
+                setState(() {});
               },
               onPressed7: () {
-                _addValue("7");
+                homeController.number('7');
+                setState(() {});
               },
               onPressed8: () {
-                _addValue("8");
+                homeController.number('8');
+                setState(() {});
               },
               onPressed9: () {
-                _addValue("9");
+                homeController.number('9');
+                setState(() {});
               },
               onPressedClear: () {
-                _clear();
+                homeController.clear();
+                setState(() {});
               },
-              onPressedParentheses: () {
-                _addValue("()");
-              },
+              onPressedParentheses: () {},
               onPressedPercent: () {
-                _addValue("%");
+                homeController.percentual();
+                setState(() {});
               },
               onPressedDivision: () {
-                _addValue("/");
+                homeController.operator('/');
+                setState(() {});
               },
               onPressedMutiplication: () {
-                _addValue("X");
+                homeController.operator('*');
+                setState(() {});
               },
               onPressedSubtraction: () {
-                _addValue("-");
+                homeController.operator('-');
+                setState(() {});
               },
               onPressedAddition: () {
-                _addValue("+");
+                homeController.operator('+');
+                setState(() {});
               },
               onPressedEqual: () {
-                _addValue("=");
+                homeController.operator('=');
+                setState(() {});
               },
               onPressedComma: () {
-                _addValue(",");
+                homeController.decimal();
+                setState(() {});
               },
             ),
           ],

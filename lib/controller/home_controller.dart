@@ -4,110 +4,111 @@ class HomeController {
   TextEditingController expression = TextEditingController();
   TextEditingController inOut = TextEditingController();
 
-  bool isClearInOut = false;
-  bool _firstAssignment = true;
-  String lastButtonClick = "";
-  String _lastSymbol = "";
-  double _value1 = 0;
-  double _value2 = 0;
-  double _result = 0;
+  String _value1 = '0';
+  String _value2 = '0';
+  String? _result;
+  String? _operator;
+
+  void refresh() {
+    if (_result == null) {
+      inOut.text = _value1 +
+          (_operator != null ? ' ' + _operator! : '') +
+          (_value2 != '0' ? ' ' + _value2 : '');
+    } else {
+      inOut.text = _result!;
+    }
+  }
 
   void clear() {
-    _value1 = 0;
-    _value2 = 0;
-    _result = 0;
-    _firstAssignment = true;
-    clearInOut();
-    _clearExpression();
+    _value1 = '0';
+    _value2 = '0';
+    _result = null;
+    _operator = null;
+
+    refresh();
   }
 
-  void clearInOut() {
-    inOut.text = "";
-  }
-
-  void _clearExpression() {
-    expression.text = "";
-  }
-
-  void addValue(String value) {
-    if (_isNumber(value)) {
-      inOut.text = inOut.text + value;
-
-      if (_lastSymbol == "=") {
-        _value1 = 0;
-        _value2 = 0;
-        _result = 0;
-        _firstAssignment = true;
-      }
-    } else {
-      isClearInOut = true;
-
-      if (_firstAssignment) {
-        _value1 = inOut.text == "" ? _result : double.tryParse(inOut.text)!;
-        _firstAssignment = false;
-      } else {
-        _value2 = inOut.text == "" ? 0 : double.tryParse(inOut.text)!;
-        _result = _calculate(value1: _value1, value2: _value2, operation: value);
-        _value1 = _result;
-        inOut.text = _result.toString();
-
-        if (value == "=") {
-          _firstAssignment = true;
-          isClearInOut = false;
-        }
-      }
-
-      _lastSymbol = value;
+  void percentual() {
+    if (_value2 != '0' && !_value2.contains('.')) {
+      _value2 = _calcPercent(_value2);
+    } else if (_value1 != '0' && !_value1.contains('.')) {
+      _value1 = _calcPercent(_value1);
     }
+
+    refresh();
   }
 
-  bool _isNumber(String value) {
-    return value.contains(RegExp(r'[0-9]'));
-  }
-
-  double _calculate({
-    required double value1,
-    required double value2,
-    required String operation,
-  }) {
-    if (operation == "+") {
-      return _add(value1: value1, value2: value2);
-    } else if (operation == "-") {
-      return _sub(value1: value1, value2: value2);
-    } else if (operation == "X") {
-      return _mult(value1: value1, value2: value2);
-    } else if (operation == "/") {
-      return _div(value1: value1, value2: value2);
-    } else if (operation == "=") {
-      if (_lastSymbol == "+") {
-        return _add(value1: value1, value2: value2);
-      } else if (_lastSymbol == "-") {
-        return _sub(value1: value1, value2: value2);
-      } else if (_lastSymbol == "X") {
-        return _mult(value1: value1, value2: value2);
-      } else if (_lastSymbol == "/") {
-        return _div(value1: value1, value2: value2);
-      } else {
-        return 0;
-      }
-    } else {
-      return 0;
+  void decimal() {
+    if (_value2 != '0' && !_value2.contains('.')) {
+      _value2 = _value2 + '.';
+    } else if (_value1 != '0' && !_value1.contains('.')) {
+      _value1 = _value1 + '.';
     }
+
+    refresh();
   }
 
-  double _add({required double value1, required double value2}) {
-    return value1 + value2;
+  void operator(String key) {
+    if (_value1 == '0') {
+      return;
+    }
+
+    if (key == '=') {
+      return _calculate();
+    }
+    if (_result != null) {
+      _condense();
+    }
+
+    _operator = key;
+
+    refresh();
   }
 
-  double _sub({required double value1, required double value2}) {
-    return value1 - value2;
+  void number(String key) {
+    if (_operator == null) {
+      _value1 = (_value1 == '0') ? key : _value1 + key;
+    } else {
+      _value2 = (_value2 == '0') ? key : _value2 + key;
+    }
+
+    refresh();
   }
 
-  double _mult({required double value1, required double value2}) {
-    return value1 * value2;
+  void _calculate() {
+    if (_operator == null || _value2 == '0') {
+      return;
+    }
+
+    String str = '';
+
+    if (_operator == '/') {
+      str = (double.parse(_value1) / double.parse(_value2)).toString();
+    } else if (_operator == '*') {
+      str = (double.parse(_value1) * double.parse(_value2)).toString();
+    } else if (_operator == '-') {
+      str = (double.parse(_value1) - double.parse(_value2)).toString();
+    } else if (_operator == '+') {
+      str = (double.parse(_value1) + double.parse(_value2)).toString();
+    }
+
+    while ((str.contains('.') && str.endsWith('0')) || str.endsWith('.')) {
+      str = str.substring(0, str.length - 1);
+    }
+
+    _result = str;
+
+    refresh();
   }
 
-  double _div({required double value1, required double value2}) {
-    return value1 / value2;
+  void _condense() {
+    _value1 = _result!;
+    _value2 = '0';
+    _result = null;
+    _operator = null;
+  }
+
+  String _calcPercent(String value) {
+    return (double.parse(value) / 100).toString();
   }
 }

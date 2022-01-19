@@ -5,12 +5,10 @@ import 'package:calc/core/app_text_styles.dart';
 import 'package:flutter/material.dart';
 
 class DisplayWidget extends StatelessWidget {
-  final TextEditingController expression;
   final TextEditingController inOut;
 
   const DisplayWidget({
     Key? key,
-    required this.expression,
     required this.inOut,
   }) : super(key: key);
 
